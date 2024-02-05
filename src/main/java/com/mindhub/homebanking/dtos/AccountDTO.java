@@ -2,11 +2,13 @@ package com.mindhub.homebanking.dtos;
 
 import com.mindhub.homebanking.modelos.Account;
 import com.mindhub.homebanking.modelos.Client;
+import com.mindhub.homebanking.modelos.Transaction;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 public class AccountDTO {
     private Long id;
@@ -17,11 +19,14 @@ public class AccountDTO {
 
     private double balance;
 
+    private Set<TransactionDTO> transactions;
+
     public AccountDTO(Account account) {
         this.id = account.getId();
         this.number = account.getNumber();
         this.date = account.getDate();
         this.balance = account.getBalance();
+        this.transactions = account.getTransactions().stream().map(TransactionDTO::new).collect(java.util.stream.Collectors.toSet());
     }
 
     public Long getId() {
@@ -38,5 +43,9 @@ public class AccountDTO {
 
     public double getBalance() {
         return balance;
+    }
+
+    public Set<TransactionDTO> getTransactions() {
+        return transactions;
     }
 }
