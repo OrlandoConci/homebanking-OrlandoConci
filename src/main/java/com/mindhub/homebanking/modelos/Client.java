@@ -1,25 +1,28 @@
 package com.mindhub.homebanking.modelos;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
-public class Cliente {
+public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String firstName;
     private String lastName;
+    private String mail;
 
-    private String correo;
-    public Cliente() { }
+    @OneToMany(mappedBy="owner", fetch=FetchType.EAGER)
+    private Set<Account> accounts = new HashSet<>();
 
-    public Cliente(String firstName, String lastName, String correo) {
+    public Client() { }
+
+    public Client(String firstName, String lastName, String mail) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.correo = correo;
+        this.mail = mail;
     }
 
     public Long getId() {
@@ -42,21 +45,31 @@ public class Cliente {
         this.lastName = lastName;
     }
 
-    public String getCorreo() {
-        return correo;
+    public String getMail() {
+        return mail;
     }
 
-    public void setCorreo(String correo) {
-        this.correo = correo;
+    public void setMail(String mail) {
+        this.mail = mail;
+    }
+
+    public Set<Account> getAccounts() {
+        return accounts;
+    }
+
+    public void addAccounts(Account account) {
+        account.setOwner(this);
+        accounts.add(account);
     }
 
     @Override
     public String toString() {
-        return "Cliente{" +
+        return "Client{" +
                 "id=" + id +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", correo='" + correo + '\'' +
+                ", mail='" + mail + '\'' +
+                ", accounts=" + accounts +
                 '}';
     }
 }
