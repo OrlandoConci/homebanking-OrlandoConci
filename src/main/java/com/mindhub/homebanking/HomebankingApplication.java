@@ -43,6 +43,9 @@ public class HomebankingApplication {
 			accountRepository.save(vin003);
 			accountRepository.save(vin004);
 
+			System.out.println(melba.toString());
+			System.out.println(silvia.toString());
+
 		};
 	}
 }

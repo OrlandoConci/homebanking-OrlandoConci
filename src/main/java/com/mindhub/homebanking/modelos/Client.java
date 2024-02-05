@@ -59,7 +59,7 @@ public class Client {
 
     public void addAccounts(Account account) {
         account.setOwner(this);
-        accounts.add(account);
+        this.accounts.add(account);
     }
 
     @Override
