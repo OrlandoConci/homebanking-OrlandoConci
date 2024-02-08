@@ -12,14 +12,15 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="owner_id")
-    private Client owner;
     private String number;
 
     private LocalDate date;
 
     private double balance;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="owner_id")
+    private Client owner;
 
     @OneToMany(mappedBy="ownerTransaction", fetch= FetchType.EAGER)
     private Set<Transaction> transactions = new HashSet<>();

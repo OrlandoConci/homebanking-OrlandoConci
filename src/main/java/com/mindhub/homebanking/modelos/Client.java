@@ -17,6 +17,9 @@ public class Client {
     @OneToMany(mappedBy="owner", fetch=FetchType.EAGER)
     private Set<Account> accounts = new HashSet<>();
 
+    @OneToMany(mappedBy = "client")
+    private Set<ClientLoan> clientloans = new HashSet<>();
+
     public Client() { }
 
     public Client(String firstName, String lastName, String mail) {
@@ -57,9 +60,23 @@ public class Client {
         return accounts;
     }
 
+
+    public Set<ClientLoan> getClientloans() {
+        return clientloans;
+    }
+
+    public void setClientloans(Set<ClientLoan> clientloans) {
+        this.clientloans = clientloans;
+    }
+
     public void addAccounts(Account account) {
         account.setOwner(this);
         this.accounts.add(account);
+    }
+
+    public void addClientLoan(ClientLoan clientLoan) {
+        clientLoan.setClient(this);
+        clientloans.add(clientLoan);
     }
 
     @Override
@@ -70,6 +87,7 @@ public class Client {
                 ", lastName='" + lastName + '\'' +
                 ", mail='" + mail + '\'' +
                 ", accounts=" + accounts +
+                ", clientloans=" + clientloans +
                 '}';
     }
 }
