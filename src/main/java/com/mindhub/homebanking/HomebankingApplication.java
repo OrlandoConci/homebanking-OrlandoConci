@@ -1,7 +1,7 @@
 package com.mindhub.homebanking;
 
-import com.mindhub.homebanking.modelos.*;
-import com.mindhub.homebanking.repositorios.*;
+import com.mindhub.homebanking.models.*;
+import com.mindhub.homebanking.repositories.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -11,7 +11,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Set;
 
-import static com.mindhub.homebanking.modelos.TransactionType.*;
+import static com.mindhub.homebanking.models.ColorType.*;
+import static com.mindhub.homebanking.models.TransactionType.*;
 
 @SpringBootApplication
 public class HomebankingApplication {
@@ -21,7 +22,7 @@ public class HomebankingApplication {
 	}
 
 	@Bean
-	public CommandLineRunner initData(ClientRepository clientRepository, AccountRepository accountRepository, TransactionRepository transactionRepository, LoanRepository loanRepository, ClientLoanRepository clientLoanRepository) {
+	public CommandLineRunner initData(ClientRepository clientRepository, AccountRepository accountRepository, TransactionRepository transactionRepository, LoanRepository loanRepository, ClientLoanRepository clientLoanRepository, CardRepository cardRepository) {
 		return args -> {
 			Client melba = new Client("Melba", "Morel", "melba@mindhub.com");
 			Client silvia = new Client("Silvia", "Montiel", "silvia@outlook.es");
@@ -46,13 +47,13 @@ public class HomebankingApplication {
 			accountRepository.save(vin004);
 
 
-			Transaction m001 = new Transaction(DEBITO, -2325.55, "Deuda Mercado Pago.", LocalDateTime.now());
-			Transaction m002 = new Transaction(CREDITO, 7405.31, "Comida del gato.", LocalDateTime.now());
-			Transaction m003 = new Transaction(DEBITO, -8340.35, "Empanadas.", LocalDateTime.now());
+			Transaction m001 = new Transaction(DEBIT, -2325.55, "Deuda Mercado Pago.", LocalDateTime.now());
+			Transaction m002 = new Transaction(CREDIT, 7405.31, "Comida del gato.", LocalDateTime.now());
+			Transaction m003 = new Transaction(DEBIT, -8340.35, "Empanadas.", LocalDateTime.now());
 
-			Transaction m004 = new Transaction(CREDITO, 4125.65, "Ahorro NaranjaX.", LocalDateTime.now());
-			Transaction m005 = new Transaction(DEBITO, -3325.21, "Salida del Sábado.", LocalDateTime.now());
-			Transaction m006 = new Transaction(CREDITO, 29325.25, "Sueldo mes de Enero.", LocalDateTime.now());
+			Transaction m004 = new Transaction(CREDIT, 4125.65, "Ahorro NaranjaX.", LocalDateTime.now());
+			Transaction m005 = new Transaction(DEBIT, -3325.21, "Salida del Sábado.", LocalDateTime.now());
+			Transaction m006 = new Transaction(CREDIT, 29325.25, "Sueldo mes de Enero.", LocalDateTime.now());
 
 			vin001.addTransactiosns(m001);
 			vin001.addTransactiosns(m002);
@@ -104,6 +105,22 @@ public class HomebankingApplication {
 			clientLoanRepository.save(clientLoan2);
 			clientLoanRepository.save(clientLoan3);
 			clientLoanRepository.save(clientLoan4);
+
+			Card card1 = new Card(DEBIT, GOLD, "106-351-635-211", 152, LocalDate.now(), LocalDate.now().plusYears(5));
+			melba.addCard(card1);
+
+			Card card2 = new Card(CREDIT, TITANIUM, "465-893-212-987", 846, LocalDate.now(), LocalDate.now().plusYears(5));
+			melba.addCard(card2);
+
+			Card card3 = new Card(CREDIT, SILVER, "842-135-976-241", 213, LocalDate.now(), LocalDate.now().plusYears(5));
+			silvia.addCard(card3);
+
+			clientRepository.save(melba);
+			clientRepository.save(silvia);
+
+			cardRepository.save(card1);
+			cardRepository.save(card2);
+			cardRepository.save(card3);
 
 		};
 	}

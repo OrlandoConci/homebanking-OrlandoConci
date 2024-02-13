@@ -1,6 +1,6 @@
-package com.mindhub.homebanking.repositorios;
+package com.mindhub.homebanking.repositories;
 
-import com.mindhub.homebanking.modelos.ClientLoan;
+import com.mindhub.homebanking.models.ClientLoan;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

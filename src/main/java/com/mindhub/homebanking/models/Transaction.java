@@ -1,12 +1,8 @@
-package com.mindhub.homebanking.modelos;
+package com.mindhub.homebanking.models;
 
-import com.mindhub.homebanking.modelos.TransactionType;
 import jakarta.persistence.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 public class Transaction {

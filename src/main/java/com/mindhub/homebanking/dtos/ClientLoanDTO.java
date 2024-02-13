@@ -1,15 +1,6 @@
 package com.mindhub.homebanking.dtos;
 
-import com.mindhub.homebanking.modelos.Client;
-import com.mindhub.homebanking.modelos.ClientLoan;
-import com.mindhub.homebanking.modelos.Loan;
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-
-import java.util.HashSet;
-import java.util.Set;
+import com.mindhub.homebanking.models.ClientLoan;
 
 public class ClientLoanDTO {
 

@@ -1,11 +1,6 @@
 package com.mindhub.homebanking.dtos;
 
-import com.mindhub.homebanking.modelos.Account;
-import com.mindhub.homebanking.modelos.Client;
-import com.mindhub.homebanking.modelos.Transaction;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import com.mindhub.homebanking.models.Account;
 
 import java.time.LocalDate;
 import java.util.Set;
