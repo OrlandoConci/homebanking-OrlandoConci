@@ -24,7 +24,7 @@ public class ClientDTO {
         this.id = client.getId();
         this.firstName = client.getFirstName();
         this.lastName = client.getLastName();
-        this.mail = client.getMail();
+        this.mail = client.getEmail();
         this.accounts = client.getAccounts().stream().map(AccountDTO::new).collect(java.util.stream.Collectors.toSet());
         this.clientLoans = client.getClientloans().stream().map(ClientLoanDTO::new).collect(java.util.stream.Collectors.toSet());
         this.cards = client.getCards().stream().map(CardDTO::new).collect(java.util.stream.Collectors.toSet());

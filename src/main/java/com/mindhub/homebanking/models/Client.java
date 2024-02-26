@@ -12,7 +12,9 @@ public class Client {
     private Long id;
     private String firstName;
     private String lastName;
-    private String mail;
+    private String email;
+    private String password;
+    private RoleType role;
 
     @OneToMany(mappedBy="cardHolder", fetch = FetchType.EAGER)
     private Set<Card> cards = new HashSet<>();
@@ -25,10 +27,19 @@ public class Client {
 
     public Client() { }
 
-    public Client(String firstName, String lastName, String mail) {
+    public Client(String firstName, String lastName, String mail, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.mail = mail;
+        this.email = mail;
+        this.password = password;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public Long getId() {
@@ -51,12 +62,12 @@ public class Client {
         this.lastName = lastName;
     }
 
-    public String getMail() {
-        return mail;
+    public String getEmail() {
+        return email;
     }
 
-    public void setMail(String mail) {
-        this.mail = mail;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public Set<Account> getAccounts() {
@@ -65,6 +76,14 @@ public class Client {
 
     public Set<Card> getCards() {
         return cards;
+    }
+
+    public RoleType getRole() {
+        return role;
+    }
+
+    public void setRole(RoleType role) {
+        this.role = role;
     }
 
     public Set<ClientLoan> getClientloans() {
@@ -90,13 +109,14 @@ public class Client {
         cards.add(card);
     }
 
+
     @Override
     public String toString() {
         return "Client{" +
                 "id=" + id +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", mail='" + mail + '\'' +
+                ", mail='" + email + '\'' +
                 ", accounts=" + accounts +
                 ", clientloans=" + clientloans +
                 '}';

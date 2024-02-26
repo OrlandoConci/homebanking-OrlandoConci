@@ -5,15 +5,14 @@ import com.mindhub.homebanking.dtos.ClientDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
 import com.mindhub.homebanking.repositories.ClientRepository;
 
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/api/clients")
 public class ClientController {
 
@@ -40,5 +39,19 @@ public class ClientController {
         }
          ClientDTO clientDTO = new ClientDTO(client);
         return new ResponseEntity<>(clientDTO, HttpStatus.OK);
+    }
+
+    @GetMapping("/test")
+    public ResponseEntity<?>test() {
+        String mail = SecurityContextHolder.getContext().getAuthentication().getName();
+        return ResponseEntity.ok("Hello " + mail);
+    }
+
+    @GetMapping("/current")
+    public ResponseEntity<?> getClient() {
+        String userMail = SecurityContextHolder.getContext().getAuthentication().getName();
+        Client client = clientRepository.findByEmail(userMail);
+
+        return ResponseEntity.ok(new ClientDTO(client));
     }
 }
