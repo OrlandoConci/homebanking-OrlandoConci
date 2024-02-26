@@ -38,18 +38,42 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login (@RequestBody LoginDTO loginDTO) {
+        if(loginDTO.email().isBlank()) {
+            return new ResponseEntity<>("The email field must not be empty " , HttpStatus.FORBIDDEN);
+        }
+        if(loginDTO.password().isBlank()) {
+            return new ResponseEntity<>("The password field must not be empty " , HttpStatus.FORBIDDEN);
+        }
+
         try{
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDTO.user(), loginDTO.password()));
-            final UserDetails userDetails = userDetailsService.loadUserByUsername(loginDTO.user());
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDTO.email(), loginDTO.password()));
+            final UserDetails userDetails = userDetailsService.loadUserByUsername(loginDTO.email());
             final String jwt = jwtUtilService.generateToken(userDetails);
             return ResponseEntity.ok(jwt);
         }catch (Exception e) {
-            return new ResponseEntity<>("MAL", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Error logging in, try again", HttpStatus.BAD_REQUEST);
         }
     }
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterDTO registerDTO) {
+
+        if(!registerDTO.email().contains("@")) {
+            return new ResponseEntity<>("Email must include \"@\" ", HttpStatus.FORBIDDEN);
+        }
+        if(registerDTO.firstName().isBlank()) {
+            return new ResponseEntity<>("The name field must not be empty " , HttpStatus.FORBIDDEN);
+        }
+        if(registerDTO.lastName().isBlank()) {
+            return new ResponseEntity<>("The last name field must not be empty " , HttpStatus.FORBIDDEN);
+        }
+        if(registerDTO.email().isBlank()) {
+            return new ResponseEntity<>("The email field must not be empty " , HttpStatus.FORBIDDEN);
+        }
+        if(registerDTO.password().isBlank()) {
+            return new ResponseEntity<>("The password field must not be empty " , HttpStatus.FORBIDDEN);
+        }
+
         Client client = new Client(
                 registerDTO.firstName(),
                 registerDTO.lastName(),

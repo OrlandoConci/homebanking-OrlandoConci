@@ -48,8 +48,8 @@ public class JwtUtilService {
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
         // Agregando la información adicional como "claim"
-        var rol = userDetails.getAuthorities().stream().toList().get(0);
-        claims.put("rol", rol);
+        var role = userDetails.getAuthorities().stream().toList().get(0);
+        claims.put("role", role);
         return createToken(claims, userDetails.getUsername());
     }
 

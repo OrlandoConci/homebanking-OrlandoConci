@@ -14,7 +14,7 @@ public class Client {
     private String lastName;
     private String email;
     private String password;
-    private RoleType role;
+    private String role = "USER";
 
     @OneToMany(mappedBy="cardHolder", fetch = FetchType.EAGER)
     private Set<Card> cards = new HashSet<>();
@@ -78,11 +78,11 @@ public class Client {
         return cards;
     }
 
-    public RoleType getRole() {
+    public String getRole() {
         return role;
     }
 
-    public void setRole(RoleType role) {
+    public void setRole(String role) {
         this.role = role;
     }
 
