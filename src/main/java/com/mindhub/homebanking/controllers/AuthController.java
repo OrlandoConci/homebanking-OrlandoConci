@@ -92,19 +92,14 @@ public class AuthController {
                 registerDTO.email(),
                 passwordEncoder.encode(registerDTO.password())
         );
-
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(registerDTO.email(), registerDTO.password()));
-        final UserDetails userDetails = userDetailsService.loadUserByUsername(registerDTO.email());
-        final String jwt = jwtUtilService.generateToken(userDetails);
-
-        //String userMail = SecurityContextHolder.getContext().getAuthentication().getName();
-        //Client clientCurrent = clientRepository.findByEmail(userMail);
+        clientRepository.save(newClient);
 
         Account newAccount = currentController.createAccount();
         newClient.addAccounts(newAccount);
 
-        clientRepository.save(newClient);
+
         accountRepository.save(newAccount);
+        clientRepository.save(newClient);
 
         return ResponseEntity.status(HttpStatus.CREATED).body("Your account was created successfully");
     }
