@@ -18,7 +18,7 @@ public class Card {
 
     private String number;
 
-    private int cvv;
+    private String cvv;
 
     private LocalDate fromDate;
 
@@ -30,7 +30,7 @@ public class Card {
 
     private Card() {};
 
-    public Card(TransactionType type, ColorType color, String number, int cvv, LocalDate fromDate, LocalDate thruDate) {
+    public Card(TransactionType type, ColorType color, String number, String cvv, LocalDate fromDate, LocalDate thruDate) {
         this.type = type;
         this.color = color;
         this.number = number;
@@ -67,11 +67,11 @@ public class Card {
         this.number = number;
     }
 
-    public Integer getCvv() {
+    public String getCvv() {
         return cvv;
     }
 
-    public void setCvv(Integer cvv) {
+    public void setCvv(String cvv) {
         this.cvv = cvv;
     }
 

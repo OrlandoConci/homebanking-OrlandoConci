@@ -53,3 +53,5 @@ public class WebConfiguration {
     }
 
 }
+
+//Repasar cuando encripta la contraseña del cliente

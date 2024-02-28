@@ -1,7 +1,9 @@
 package com.mindhub.homebanking.controllers;
 
 import com.mindhub.homebanking.models.Client;
+import com.mindhub.homebanking.models.Account;
 import com.mindhub.homebanking.dtos.ClientDTO;
+import com.mindhub.homebanking.repositories.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,10 +11,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import com.mindhub.homebanking.repositories.ClientRepository;
 
+import java.time.LocalDate;
 import java.util.List;
 
+
+//@CrossOrigin(origins = "*")
 @RestController
-@CrossOrigin(origins = "*")
 @RequestMapping("/api/clients")
 public class ClientController {
 
@@ -47,11 +51,4 @@ public class ClientController {
         return ResponseEntity.ok("Hello " + mail);
     }
 
-    @GetMapping("/current")
-    public ResponseEntity<?> getClient() {
-        String userMail = SecurityContextHolder.getContext().getAuthentication().getName();
-        Client client = clientRepository.findByEmail(userMail);
-
-        return ResponseEntity.ok(new ClientDTO(client));
-    }
 }

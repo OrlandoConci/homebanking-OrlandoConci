@@ -6,6 +6,8 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
+import static java.lang.Math.round;
+
 @Entity
 public class Account {
     @Id
@@ -32,6 +34,11 @@ public class Account {
         this.number = number;
         this.date = date;
         this.balance = balance;
+    }
+
+    public static String getRandomNumber(int min, int max) {
+        Double resultado = (Math.random() * (max - min)) + min;
+        return String.format("%.0f", resultado);
     }
 
     public Long getId() {

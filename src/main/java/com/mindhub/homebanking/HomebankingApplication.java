@@ -15,6 +15,8 @@ import java.util.Set;
 
 import static com.mindhub.homebanking.models.ColorType.*;
 import static com.mindhub.homebanking.models.TransactionType.*;
+import static java.lang.Math.round;
+import static com.mindhub.homebanking.models.Account.getRandomNumber;
 
 @SpringBootApplication
 public class HomebankingApplication {
@@ -41,10 +43,10 @@ public class HomebankingApplication {
 			clientRepository.save(silvia);
 
 
-			Account vin001 = new Account("VIN001", LocalDate.now(), 5000);
-			Account vin002 = new Account("VIN002", LocalDate.now().plusDays(1), 7500);
-			Account vin003 = new Account("VIN003", LocalDate.now(), 4500);
-			Account vin004 = new Account("VIN004", LocalDate.now().plusDays(1), 8000);
+			Account vin001 = new Account("VIN-001", LocalDate.now(), 5000);
+			Account vin002 = new Account("VIN-002", LocalDate.now().plusDays(1), 7500);
+			Account vin003 = new Account("VIN-003", LocalDate.now(), 4500);
+			Account vin004 = new Account("VIN-004", LocalDate.now().plusDays(1), 8000);
 
 			melba.addAccounts(vin001);
 			melba.addAccounts(vin002);
@@ -116,13 +118,13 @@ public class HomebankingApplication {
 			clientLoanRepository.save(clientLoan3);
 			clientLoanRepository.save(clientLoan4);
 
-			Card card1 = new Card(DEBIT, GOLD, "106-351-635-211", 152, LocalDate.now(), LocalDate.now().plusYears(5));
+			Card card1 = new Card(DEBIT, GOLD, "106-351-635-211", "152", LocalDate.now(), LocalDate.now().plusYears(5));
 			melba.addCard(card1);
 
-			Card card2 = new Card(CREDIT, TITANIUM, "465-893-212-987", 846, LocalDate.now(), LocalDate.now().plusYears(5));
+			Card card2 = new Card(CREDIT, TITANIUM, "465-893-212-987", "846", LocalDate.now(), LocalDate.now().plusYears(5));
 			melba.addCard(card2);
 
-			Card card3 = new Card(CREDIT, SILVER, "842-135-976-241", 213, LocalDate.now(), LocalDate.now().plusYears(5));
+			Card card3 = new Card(CREDIT, SILVER, "842-135-976-241", "213", LocalDate.now(), LocalDate.now().plusYears(5));
 			silvia.addCard(card3);
 
 			clientRepository.save(melba);
