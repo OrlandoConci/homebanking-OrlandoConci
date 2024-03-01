@@ -97,7 +97,6 @@ public class AuthController {
         Account newAccount = currentController.createAccount();
         newClient.addAccounts(newAccount);
 
-
         accountRepository.save(newAccount);
         clientRepository.save(newClient);
 

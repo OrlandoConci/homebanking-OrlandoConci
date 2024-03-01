@@ -4,9 +4,7 @@ import com.mindhub.homebanking.dtos.CardDTO;
 import com.mindhub.homebanking.dtos.ClientDTO;
 import com.mindhub.homebanking.dtos.AccountDTO;
 import com.mindhub.homebanking.dtos.CreationCartDTO;
-import com.mindhub.homebanking.models.Account;
-import com.mindhub.homebanking.models.Card;
-import com.mindhub.homebanking.models.Client;
+import com.mindhub.homebanking.models.*;
 import com.mindhub.homebanking.repositories.AccountRepository;
 import com.mindhub.homebanking.repositories.CardRepository;
 import com.mindhub.homebanking.repositories.ClientRepository;
@@ -22,6 +20,7 @@ import java.util.Set;
 
 import static com.mindhub.homebanking.models.Account.getRandomNumber;
 import static io.jsonwebtoken.lang.Collections.size;
+import static java.lang.String.valueOf;
 
 @RestController
 @RequestMapping("/api/clients/current")
@@ -86,19 +85,20 @@ public class CurrentController {
         String userMail = SecurityContextHolder.getContext().getAuthentication().getName();
         Client client = clientRepository.findByEmail(userMail);
 
-        List<Boolean> exists = client.getCards().stream().map(card -> card.getColor() == creationCartDTO.colorType() &&
-                card.getType() == creationCartDTO.transactionType()).toList();
+        //Mejorado de .equals("") a is blank cambiando DTO a string
+        if(creationCartDTO.transactionType() == null || creationCartDTO.transactionType().isBlank()) {
+            return new ResponseEntity<>("The transaction type field must not be empty " , HttpStatus.FORBIDDEN);
+        }
 
-        if (exists.contains(true)) {
+        //Mejorado de .equals("") a is blank cambiando DTO a string
+        if(creationCartDTO.colorType() == null || creationCartDTO.colorType().isBlank()) {
+            return new ResponseEntity<>("The color type field must not be empty " , HttpStatus.FORBIDDEN);
+        }
+
+        //Mejorado de lista de booleanos a método de repositorio
+        if (cardRepository.existsCardByTypeAndColorAndCardHolder(TransactionType.valueOf(creationCartDTO.transactionType())
+                , ColorType.valueOf(creationCartDTO.colorType()), client)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Limit reached, you cannot have more than 1 cards equals");
-        }
-
-        if(creationCartDTO.transactionType().equals("")) {
-            return new ResponseEntity<>("The card type field must not be empty " , HttpStatus.FORBIDDEN);
-        }
-
-        if(creationCartDTO.colorType().equals("")) {
-            return new ResponseEntity<>("The card type field must not be empty " , HttpStatus.FORBIDDEN);
         }
 
         String number = "";
@@ -106,7 +106,7 @@ public class CurrentController {
             number = getRandomNumber(1000, 2001) + '-' + getRandomNumber(2001, 3001) + '-' + getRandomNumber(3001, 4001) + '-' + getRandomNumber(4001, 5001);
         } while (cardRepository.existsByNumber(number));
 
-        Card newCard = new Card(creationCartDTO.transactionType(), creationCartDTO.colorType(), number, getRandomNumber(100, 1000), LocalDate.now(), LocalDate.now().plusYears(5));
+        Card newCard = new Card(TransactionType.valueOf(creationCartDTO.transactionType()), ColorType.valueOf(creationCartDTO.colorType()), number, getRandomNumber(100, 1000), LocalDate.now(), LocalDate.now().plusYears(5));
 
         client.addCard(newCard);
 
