@@ -63,6 +63,14 @@ public class LoanController {
             return new ResponseEntity<>("The number account field cannot be empty.", HttpStatus.BAD_REQUEST);
         }
         //------------------------------------------------
+        if (creationLoanDTO.amount() <= 0) {
+            return new ResponseEntity<>("The amount cannot be less than or equal to zero", HttpStatus.BAD_REQUEST);
+        }
+
+        if (creationLoanDTO.installments() <= 0) {
+            return new ResponseEntity<>("The installments cannot be less than or equal to zero", HttpStatus.BAD_REQUEST);
+        }
+
         if (!loanRepository.existsByName(creationLoanDTO.name())) {
             return new ResponseEntity<>("Non-existent loan", HttpStatus.FORBIDDEN);
         }
