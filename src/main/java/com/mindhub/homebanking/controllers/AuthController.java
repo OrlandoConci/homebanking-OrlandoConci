@@ -6,13 +6,13 @@ import com.mindhub.homebanking.models.Account;
 import com.mindhub.homebanking.models.Client;
 import com.mindhub.homebanking.repositories.AccountRepository;
 import com.mindhub.homebanking.repositories.ClientRepository;
-import com.mindhub.homebanking.services.JwtUtilService;
+import com.mindhub.homebanking.securityServices.JwtUtilService;
+import com.mindhub.homebanking.services.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,10 +20,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.time.LocalDate;
-
-import static com.mindhub.homebanking.models.Account.getRandomNumber;
 
 
 @RestController
@@ -39,7 +35,7 @@ public class AuthController {
     private JwtUtilService jwtUtilService;
 
     @Autowired
-    private ClientRepository clientRepository;
+    private ClientService clientService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -52,14 +48,20 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login (@RequestBody LoginDTO loginDTO) {
-        if(loginDTO.email().isBlank()) {
-            return new ResponseEntity<>("The email field must not be empty " , HttpStatus.FORBIDDEN);
-        }
-        if(loginDTO.password().isBlank()) {
-            return new ResponseEntity<>("The password field must not be empty " , HttpStatus.FORBIDDEN);
-        }
-
+        Client client = clientService.getClientByEmail(loginDTO.email();
         try{
+            if(loginDTO.email().isBlank()) {
+                return new ResponseEntity<>("The email field must not be empty " , HttpStatus.FORBIDDEN);
+            }
+            if(loginDTO.password().isBlank()) {
+                return new ResponseEntity<>("The password field must not be empty " , HttpStatus.FORBIDDEN);
+            }
+            if(client == null) {
+                return new ResponseEntity<>("The email entered is not valid", HttpStatus.FORBIDDEN);
+            }
+            if(!passwordEncoder.matches(loginDTO.password(), client.getPassword())) {
+                return new ResponseEntity<>("The password entered is not valid", HttpStatus.FORBIDDEN);
+            }
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDTO.email(), loginDTO.password()));
             final UserDetails userDetails = userDetailsService.loadUserByUsername(loginDTO.email());
             final String jwt = jwtUtilService.generateToken(userDetails);
@@ -92,13 +94,13 @@ public class AuthController {
                 registerDTO.email(),
                 passwordEncoder.encode(registerDTO.password())
         );
-        clientRepository.save(newClient);
+        clientService.saveClient(newClient);
 
         Account newAccount = currentController.createAccount();
         newClient.addAccounts(newAccount);
 
         accountRepository.save(newAccount);
-        clientRepository.save(newClient);
+        clientService.saveClient(newClient);
 
         return ResponseEntity.status(HttpStatus.CREATED).body("Your account was created successfully");
     }
