@@ -21,8 +21,8 @@ import static com.mindhub.homebanking.models.Account.getRandomNumber;
 @SpringBootApplication
 public class HomebankingApplication {
 
-	@Autowired
-	private PasswordEncoder passwordEncoder;
+//	@Autowired
+//	private PasswordEncoder passwordEncoder;
 
 	public static void main(String[] args) {
 		SpringApplication.run(HomebankingApplication.class, args);
@@ -36,7 +36,7 @@ public class HomebankingApplication {
 									  ClientLoanRepository clientLoanRepository,
 									  CardRepository cardRepository) {
 		return args -> {
-			Client melba = new Client("Melba", "Morel", "melba@mindhub.com", passwordEncoder.encode("123"));
+			/*Client melba = new Client("Melba", "Morel", "melba@mindhub.com", passwordEncoder.encode("123"));
 			Client silvia = new Client("Silvia", "Montiel", "silvia@outlook.es", passwordEncoder.encode("123"));
 
 			clientRepository.save(melba);
@@ -132,8 +132,9 @@ public class HomebankingApplication {
 
 			cardRepository.save(card1);
 			cardRepository.save(card2);
-			cardRepository.save(card3);
+			cardRepository.save(card3);*/
 
+			System.out.println("..... Corriendo .....");
 		};
 	}
 }

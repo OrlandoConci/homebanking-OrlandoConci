@@ -8,6 +8,7 @@ import com.mindhub.homebanking.models.*;
 import com.mindhub.homebanking.repositories.AccountRepository;
 import com.mindhub.homebanking.repositories.CardRepository;
 import com.mindhub.homebanking.repositories.ClientRepository;
+import com.mindhub.homebanking.services.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,8 +27,11 @@ import static java.lang.String.valueOf;
 @RequestMapping("/api/clients/current")
 public class CurrentController {
 
+//    @Autowired
+//    private ClientRepository clientRepository;
+
     @Autowired
-    private ClientRepository clientRepository;
+    private ClientService clientService;
 
     @Autowired
     private AccountRepository accountRepository;
@@ -38,7 +42,7 @@ public class CurrentController {
     @GetMapping("/")
     public ResponseEntity<?> getClient() {
         String userMail = SecurityContextHolder.getContext().getAuthentication().getName();
-        Client client = clientRepository.findByEmail(userMail);
+        Client client = clientService.getClientByEmail(userMail);
 
         return ResponseEntity.ok(new ClientDTO(client));
     }
@@ -46,7 +50,7 @@ public class CurrentController {
     @PostMapping("/accounts")
     public ResponseEntity<?> postNewAccount() {
         String userMail = SecurityContextHolder.getContext().getAuthentication().getName();
-        Client client = clientRepository.findByEmail(userMail);
+        Client client = clientService.getClientByEmail(userMail);
         if (client.getRole().equals("USER")) {
             if (client.getAccounts().size() == 3) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Limit reached, you cannot have more than 3 accounts");
@@ -55,7 +59,7 @@ public class CurrentController {
             Account newAccount = createAccount();
 
             client.addAccounts(newAccount);
-            clientRepository.save(client);
+            clientService.saveClient(client);
             accountRepository.save(newAccount);
             return ResponseEntity.status(HttpStatus.CREATED).body("Your account was created successfully");
         }
@@ -65,7 +69,7 @@ public class CurrentController {
     @GetMapping("/accounts")
     public ResponseEntity<?> getAllAccountsCurrent() {
         String userMail = SecurityContextHolder.getContext().getAuthentication().getName();
-        Client client = clientRepository.findByEmail(userMail);
+        Client client = clientService.getClientByEmail(userMail);
 
         return new ResponseEntity<>(client.getAccounts().stream().map(AccountDTO::new).collect(java.util.stream.Collectors.toList()), HttpStatus.OK);
     }
@@ -83,7 +87,7 @@ public class CurrentController {
     public ResponseEntity<?> creationCards(@RequestBody CreationCartDTO creationCartDTO) {
 
         String userMail = SecurityContextHolder.getContext().getAuthentication().getName();
-        Client client = clientRepository.findByEmail(userMail);
+        Client client = clientService.getClientByEmail(userMail);
 
         //Mejorado de .equals("") a is blank cambiando DTO a string
         if(creationCartDTO.transactionType() == null || creationCartDTO.transactionType().isBlank()) {
@@ -110,7 +114,7 @@ public class CurrentController {
 
         client.addCard(newCard);
 
-        clientRepository.save(client);
+        clientService.saveClient(client);
         cardRepository.save(newCard);
 
         return ResponseEntity.status(HttpStatus.CREATED).body("Your card was created successfully");
@@ -119,7 +123,7 @@ public class CurrentController {
     @GetMapping("/cards")
     public ResponseEntity<?> getAllCardsCurrent() {
         String userMail = SecurityContextHolder.getContext().getAuthentication().getName();
-        Client client = clientRepository.findByEmail(userMail);
+        Client client = clientService.getClientByEmail(userMail);
 
         return new ResponseEntity<>(client.getCards().stream().map(CardDTO::new).collect(java.util.stream.Collectors.toList()), HttpStatus.OK);
     }

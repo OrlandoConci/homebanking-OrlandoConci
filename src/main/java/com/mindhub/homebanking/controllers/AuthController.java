@@ -48,7 +48,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login (@RequestBody LoginDTO loginDTO) {
-        Client client = clientService.getClientByEmail(loginDTO.email();
+        Client client = clientService.getClientByEmail(loginDTO.email());
         try{
             if(loginDTO.email().isBlank()) {
                 return new ResponseEntity<>("The email field must not be empty " , HttpStatus.FORBIDDEN);
