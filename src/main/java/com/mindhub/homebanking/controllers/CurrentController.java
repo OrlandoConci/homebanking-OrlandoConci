@@ -37,7 +37,7 @@ public class CurrentController {
     private AccountRepository accountRepository;
 
     @Autowired
-    private CardRepository cardRepository;
+    private static CardRepository cardRepository;
 
     @GetMapping("/")
     public ResponseEntity<?> getClient() {
@@ -105,10 +105,7 @@ public class CurrentController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Limit reached, you cannot have more than 1 cards equals");
         }
 
-        String number = "";
-        do {
-            number = getRandomNumber(1000, 2001) + '-' + getRandomNumber(2001, 3001) + '-' + getRandomNumber(3001, 4001) + '-' + getRandomNumber(4001, 5001);
-        } while (cardRepository.existsByNumber(number));
+        String number = generateNumberCard();
 
         Card newCard = new Card(TransactionType.valueOf(creationCartDTO.transactionType()), ColorType.valueOf(creationCartDTO.colorType()), number, getRandomNumber(100, 1000), LocalDate.now(), LocalDate.now().plusYears(5));
 
@@ -118,6 +115,14 @@ public class CurrentController {
         cardRepository.save(newCard);
 
         return ResponseEntity.status(HttpStatus.CREATED).body("Your card was created successfully");
+    }
+
+    public static String generateNumberCard() {
+        String number = "";
+        do {
+            number = getRandomNumber(1000, 2001) + '-' + getRandomNumber(2001, 3001) + '-' + getRandomNumber(3001, 4001) + '-' + getRandomNumber(4001, 5001);
+        } while (cardRepository.existsByNumber(number));
+        return number;
     }
 
     @GetMapping("/cards")
